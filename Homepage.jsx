@@ -1,1 +1,0 @@
-export default function Homepage() { return (<div className='text-center p-8'><h1 className='text-4xl font-bold'>Welcome to Dani Declares</h1><p className='mt-4 text-lg'>Your hub for weddings, notary, coaching, and events.</p></div>); }
