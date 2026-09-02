@@ -47,6 +47,7 @@ form { display: grid; gap: 18px; }
 label { display: grid; gap: 7px; font-weight: 700; }
 input, select, textarea { width: 100%; border: 1px solid #cfc4bb; border-radius: 4px; padding: 12px; font: inherit; background: white; }
 .form-note { font-size: .9rem; color: #6d625b; }
+.honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
 
 @media (max-width: 950px) { .nav { align-items: flex-start; flex-direction: column; } .nav-links { justify-content: flex-start; } .grid.five, .grid.three { grid-template-columns: repeat(2, 1fr); } .intro, .split { grid-template-columns: 1fr; } }
 @media (max-width: 620px) { .hero, .page-hero { padding: 75px 6vw 55px; } .grid.five, .grid.two, .grid.three { grid-template-columns: 1fr; padding-left: 6vw; padding-right: 6vw; } .channel { grid-template-columns: 1fr; gap: 10px; } .nav-links { gap: 10px; font-size: .86rem; } }
