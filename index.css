@@ -1,7 +1,52 @@
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: Georgia, 'Times New Roman', serif; background: #f8f5f1; color: #211b18; }
+a { color: inherit; text-decoration: none; }
+p { line-height: 1.7; }
 
-body {
-  margin: 0;
-  font-family: 'Georgia', serif;
-  background-color: #F8F5F1;
-  color: #8B1E2E;
-}
+.nav { position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 18px 5vw; background: rgba(248,245,241,.97); border-bottom: 1px solid #ded5cd; }
+.brand { color: #8b1e2e; font-size: 1.35rem; font-weight: 700; letter-spacing: .08em; white-space: nowrap; }
+.nav-links { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; justify-content: flex-end; font-size: .94rem; }
+.nav-links a:hover, .text-link:hover { color: #8b1e2e; }
+.nav-cta { padding: 10px 15px; border: 1px solid #8b1e2e; border-radius: 999px; color: #8b1e2e; }
+
+.hero, .page-hero { padding: 110px 8vw 85px; max-width: 1250px; margin: auto; }
+.hero { min-height: 68vh; display: flex; flex-direction: column; justify-content: center; }
+.eyebrow { color: #8b1e2e; font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 16px; }
+h1 { font-size: clamp(2.7rem, 6vw, 5.5rem); line-height: .98; max-width: 950px; margin: 0 0 25px; color: #211b18; }
+h2 { font-size: clamp(1.7rem, 3vw, 2.7rem); line-height: 1.1; margin: 0 0 15px; color: #211b18; }
+h3 { font-size: 1.25rem; margin: 0 0 10px; color: #211b18; }
+.hero-copy, .page-hero > p { max-width: 760px; font-size: 1.2rem; color: #5e5149; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+.button { display: inline-block; padding: 13px 20px; border-radius: 4px; font-weight: 700; border: 1px solid #8b1e2e; }
+.primary { background: #8b1e2e; color: white; }
+.secondary { color: #8b1e2e; background: transparent; }
+.light { color: white; border-color: white; margin-top: 12px; }
+
+.section { max-width: 1250px; margin: 0 auto; padding: 75px 6vw; }
+.intro, .split { display: grid; grid-template-columns: 1fr 1fr; gap: 55px; align-items: start; }
+.intro p, .split p { color: #5e5149; font-size: 1.05rem; }
+.grid { display: grid; gap: 18px; }
+.grid.five { grid-template-columns: repeat(5, 1fr); max-width: 1400px; }
+.grid.two { grid-template-columns: repeat(2, 1fr); max-width: 1150px; margin: 0 auto; padding: 0 6vw 75px; }
+.grid.three { grid-template-columns: repeat(3, 1fr); max-width: 1150px; margin: 0 auto; padding: 0 6vw 75px; }
+.card { background: #fffdfa; border: 1px solid #ded5cd; padding: 28px; border-radius: 6px; }
+.card p, .card li { color: #5e5149; }
+.dark-panel { max-width: none; padding-left: 12vw; padding-right: 12vw; background: #211b18; color: white; }
+.dark-panel h2 { color: white; max-width: 900px; }
+.dark-panel p { max-width: 800px; color: #ddd3cc; }
+.dark-panel .eyebrow { color: #e5b5bd; }
+.callout { max-width: 1150px; background: #eee7e1; margin-bottom: 70px; border-radius: 8px; }
+.callout p { max-width: 800px; }
+.channel-list { max-width: 1050px; margin: 0 auto; padding: 0 6vw 90px; }
+.channel { display: grid; grid-template-columns: 110px 1fr; gap: 35px; padding: 30px 0; border-bottom: 1px solid #ded5cd; }
+.channel-number { color: #8b1e2e; font-weight: 700; letter-spacing: .12em; }
+.text-link { color: #8b1e2e; font-weight: 700; }
+.form-card { max-width: 800px; margin: 0 auto 90px; }
+form { display: grid; gap: 18px; }
+label { display: grid; gap: 7px; font-weight: 700; }
+input, select, textarea { width: 100%; border: 1px solid #cfc4bb; border-radius: 4px; padding: 12px; font: inherit; background: white; }
+.form-note { font-size: .9rem; color: #6d625b; }
+
+@media (max-width: 950px) { .nav { align-items: flex-start; flex-direction: column; } .nav-links { justify-content: flex-start; } .grid.five, .grid.three { grid-template-columns: repeat(2, 1fr); } .intro, .split { grid-template-columns: 1fr; } }
+@media (max-width: 620px) { .hero, .page-hero { padding: 75px 6vw 55px; } .grid.five, .grid.two, .grid.three { grid-template-columns: 1fr; padding-left: 6vw; padding-right: 6vw; } .channel { grid-template-columns: 1fr; gap: 10px; } .nav-links { gap: 10px; font-size: .86rem; } }
