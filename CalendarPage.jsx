@@ -1,1 +1,3 @@
-export default function CalendarPage() { return (<div className='text-center p-8'><h1 className='text-4xl font-bold'>Events Calendar</h1><p className='mt-4 text-lg'>Stay updated on our upcoming availability and events.</p></div>); }
+import { Link } from 'react-router-dom';
+
+export default function CalendarPage() { return <main className="page"><section className="page-hero"><div className="eyebrow">AVAILABILITY & EVENTS</div><h1>Plan around what matters.</h1><p>Event dates, service availability and booking windows will be surfaced here as the scheduling layer is connected to the operating system.</p><Link to="/contact" className="button primary">Request a Date</Link></section><section className="card"><h2>Calendar integration</h2><p>The public calendar is intentionally informational until live availability is connected to the controlled fulfillment and scheduling workflow. We will not expose unverified availability.</p></section></main>; }
