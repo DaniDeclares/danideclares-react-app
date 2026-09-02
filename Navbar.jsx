@@ -2,13 +2,15 @@ import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   return (
-    <nav className="bg-white shadow-md py-4 px-6 flex justify-between items-center text-[#8B1E2E] font-serif">
-      <div className="text-2xl font-bold">Dani Declares</div>
-      <div className="flex space-x-4 text-lg">
-        <Link to="/" className="hover:underline">Home</Link>
-        <Link to="/weddings" className="hover:underline">Weddings</Link>
-        <Link to="/calendar" className="hover:underline">Calendar</Link>
-        <Link to="/coaching" className="hover:underline">Coaching</Link>
+    <nav className="nav">
+      <Link to="/" className="brand">DANI DECLARES</Link>
+      <div className="nav-links">
+        <Link to="/services">Services</Link>
+        <Link to="/channels">Who We Serve</Link>
+        <Link to="/weddings">Weddings & Events</Link>
+        <Link to="/coaching">Business Support</Link>
+        <Link to="/provider-network">Provider Network</Link>
+        <Link to="/contact" className="nav-cta">Start a Request</Link>
       </div>
     </nav>
   );
