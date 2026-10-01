@@ -201,3 +201,33 @@ end $$;
 
 do $$ begin perform cron.unschedule('dani-social-visual-pipeline'); exception when others then null; end $$;
 select cron.schedule('dani-social-visual-pipeline','*/30 * * * *','select public.dd_run_dani_social_visual_pipeline_v1();');
+
+-- Proof-safety repair: DANI_PROOF content may not silently fall back to a generic Canva template.
+create or replace function public.dd_social_plan_content_v1(p_limit integer default 20) returns jsonb
+language plpgsql security definer set search_path=public as $$
+declare v_created int:=0;
+begin
+  insert into public.dd_social_content_queue_v1
+  (content_key,campaign_key,platform,format,service_key,hook,body_copy,visual_direction,asset_key,cta,proof_class,approval_status,dedupe_key,metadata)
+  select 'SOCIAL:'||lower(g.gap_key)||':'||lower(p.platform),'DANI_VISUAL_SALES_ENGINE_V1',p.platform,
+    case when p.platform in ('INSTAGRAM','TIKTOK') then 'SHORT_VIDEO_OR_CAROUSEL' else 'SINGLE_IMAGE' end,g.service_key,
+    case when p.platform='NEXTDOOR' then 'Local help for '||lower(g.service_name) when p.platform='LINKEDIN' then 'The operational task your team still has to chase' else 'A real-world problem DANI DECLARES can help execute' end,
+    case when p.platform='NEXTDOOR' then 'DANI DECLARES provides local execution support. Ask about '||g.service_name||'.' when p.platform='LINKEDIN' then 'DANI DECLARES coordinates practical execution around '||g.service_name||' so teams can spend less time chasing fragmented tasks.' else 'Need help with '||g.service_name||'? DANI DECLARES handles the execution with a documented, coordinated process.' end,
+    case when g.proof_requirement='DANI_PROOF' then 'Use an actual DANI photo/video first. If no approved DANI proof exists, leave the visual slot empty and route the gap for asset review.' else 'Use real DANI proof when available; otherwise use licensed illustrative imagery and label the concept clearly.' end,
+    case when g.proof_requirement='DANI_PROOF' then
+      (select a.asset_key from public.dd_social_visual_asset_registry_v1 a where a.approval_status='OWNER_APPROVED' and a.proof_class='DANI_PROOF' and a.rights_status in ('OWNED','LICENSED_COMMERCIAL','CANVA_LICENSED') and (a.service_keys @> array[g.service_key] or a.visual_type='TEMPLATE') and p.platform=any(a.platform_scope) order by a.updated_at desc limit 1)
+    else
+      (select a.asset_key from public.dd_social_visual_asset_registry_v1 a where a.approval_status='OWNER_APPROVED' and a.rights_status in ('OWNED','LICENSED_COMMERCIAL','CANVA_LICENSED') and p.platform=any(a.platform_scope) order by (a.proof_class='DANI_PROOF') desc,a.updated_at desc limit 1)
+    end,
+    case when p.platform='LINKEDIN' then 'Request a commercial service conversation' when p.platform='NEXTDOOR' then 'Message DANI' else 'DM DANI DECLARES' end,
+    g.proof_requirement,'DRAFT','SOCIAL:'||g.gap_key||':'||p.platform,
+    jsonb_build_object('buyer_segment',g.buyer_segment,'visual_gap',g.gap_key,'owner_approval_required',true,'external_publish',false)
+  from public.dd_social_visual_gaps_v1 g cross join lateral unnest(g.channel_scope) p(platform)
+  where g.status<>'RETIRED' and not exists(select 1 from public.dd_social_content_queue_v1 q where q.dedupe_key='SOCIAL:'||g.gap_key||':'||p.platform)
+  order by case coalesce(g.metadata->>'priority','P9') when 'P0' then 0 when 'P1' then 1 else 2 end limit greatest(1,least(100,p_limit));
+  get diagnostics v_created=row_count;
+  update public.dd_social_content_queue_v1 q set asset_key=null,updated_at=now()
+  where q.approval_status='DRAFT' and q.proof_class='DANI_PROOF' and q.asset_key is not null
+    and not exists(select 1 from public.dd_social_visual_asset_registry_v1 a where a.asset_key=q.asset_key and a.proof_class='DANI_PROOF' and a.approval_status='OWNER_APPROVED');
+  return jsonb_build_object('status','COMPLETED','drafts_created',v_created,'proof_safety_repaired',true,'owner_approval_required',true,'external_publish',false,'production_mutation',false);
+end $$;
